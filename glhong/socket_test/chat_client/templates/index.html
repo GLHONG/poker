@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+		<script src="http://localhost:3303/socket.io/socket.io.js"></script>
+	</head>
+	<body>
+		<!-- 받은 메시지 출력하는 곳 -->
+		<div id='msg'>
+		</div>
+		<!-- 메시지 입력 -->
+		<input type="text" id="text"/>
+		<!-- 메시지 전송 -->
+		<input type="button" id="send_btn" value="전송"/>
+		<script>
+			$(document).ready(function(){
+				// 소켓 서버 ip
+				var socket = io.connect('http://localhost:3303');
+				// 소켓 서버에 연결시 alert
+				socket.on('connection', function(data){
+					alert(data);
+				});
+				// 소켓 서버에서 메시지를 받으면 msg에 메시지 출력
+				socket.on('fromserver', function(data){
+					$('#msg').append(data);
+				});
+				// 소켓 서버에 메시지 전송
+				$('#send_btn').click(function(){
+					socket.emit('toserver', {msg: $('#text').val()});
+				});
+			});
+		</script>
+	</body>
+</html>

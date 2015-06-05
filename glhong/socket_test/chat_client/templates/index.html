@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<script src="http://code.jquery.com/jquery-1.7.1.js"></script>
-		<script src="http://192.168.2.4:3303/socket.io/socket.io.js"></script>
+		<script src="http://localhost:3303/socket.io/socket.io.js"></script>
 	</head>
 	<body>
 		<!-- 받은 메시지 출력하는 곳 -->
@@ -14,7 +14,7 @@
 		<script>
 			$(document).ready(function(){
 				// 소켓 서버 ip
-				var socket = io.connect('http://192.168.2.4:3303');
+				var socket = io.connect('http://localhost:3303');
 				// 소켓 서버에 연결시 alert
 				socket.on('connection', function(data){
 					alert(data);

@@ -1,10 +1,10 @@
 # Node.js + Django 소켓 통신
 
 ## 설치 방법 및 실행
-###/node_socket
+###/node_socket/
 ```sh
 $ npm install // socket.io 모듈 다운 및 설치
-$ node socket.js // 소켓 서버 구동동(3303포트)
+$ node socket.js // 소켓 서버 구동(3303포트)
 $ cd ..
 $ python3 manage.py runserver(8000포트) // 장고 프로젝트 실행
 ```

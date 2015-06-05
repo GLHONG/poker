@@ -21,12 +21,14 @@ class Login(APIView):
         return HttpResponse(template.render(context))
 
 class Join(APIView):
+    # /join/에서 GET 요청한 경우 회원가입 페이지 출력.
     def get(self, request):
         template = get_template('join.html')
         context = Context({'join_form': JoinForm()})
         context.update(csrf(request))
         return HttpResponse(template.render(context))
 
+    # /join/에서 POST 요청한 경우 회원가입 실행
     def post(self, request):
         forms = JoinForm(request.POST)
         # 폼 검증

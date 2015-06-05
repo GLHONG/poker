@@ -3,9 +3,10 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
-    <form action="" method="POST">
+    <form id="join_form" action="" method="POST">
     {% csrf_token %}
         <div>
             <label for="{{ join_form.user_id.user_id_for_label }}">{{ join_form.user_id.label }} : </label>{{ join_form.user_id }}
@@ -45,5 +46,23 @@
         </div>
         <input type="submit" value="회원가입">
     </form>
+    <script>
+        var form = $('#join_form');
+        form.submit(function() {
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (data) {
+                    console.log('success');
+                },
+                error: function(data) {
+                    console.log('error');
+                }
+            });
+            return false;
+        });
+
+    </script>
 </body>
 </html>

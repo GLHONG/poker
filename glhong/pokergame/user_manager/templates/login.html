@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<form id="login_form">
+    <div>
+        <label>{{ form.email.label }} : </label>{{ form.email }}
+        <div id="email_error" class="error_text"></div>
+    </div>
+    <div>
+        <label>{{ form.password.label }} : </label>{{ form.password }}
+        <div id="password_error" class="error_text"></div>
+    </div>
+    <input type="button" id="login_btn" value="Login">
+</form>
+<script>
+    $('#login_btn').click(function(){
+        $.ajax({
+            url : "/api/user/login/",
+            type : "POST",
+            data : $('#login_form').serializeArray(),
+            dataType: 'JSON',
+            success : function(data) {
+                if(data.result) {
+                    location.href = "/game/"; // 성공적으로 가입된 경우 login페이지로 이동
+                    return true;
+                }
+                if(data.error) // 사용자가 입력한 내용에서 에러가 있는 경우
+                    show_error(data.error);
+                else // 아이디와 비밀번호가 일치하지 않는 경우
+                    alert("아이디 또는 비밀번호를 다시 한 번 확인해주세요.");
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    });
+
+    // 회원가입 요청에서 에러가 있는 경우 사용자에게 에러 내용 표시
+    function show_error(error){
+        $('.error_text').empty(); // 기존에 있었던 에러 내용 삭제
+        for(key in error) // 에러 내용 표시
+            $('#' + key + '_error').text(error[key]);
+    }
+</script>
+</body>
+</html>

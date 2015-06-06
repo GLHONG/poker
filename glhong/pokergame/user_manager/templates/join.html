@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<form id="join_form">
+    <div>
+        <label>{{ form.email.label }} : </label>{{ form.email }}
+        <div id="email_error" class="error_text"></div>
+    </div>
+    <div>
+        <label>{{ form.username.label }} : </label>{{ form.username }}
+        <div id="username_error" class="error_text"></div>
+    </div>
+    <div>
+        <label>{{ form.password.label }} : </label>{{ form.password }}
+        <div id="password_error" class="error_text"></div>
+    </div>
+    <div>
+        <label>{{ form.password_check.label }} : </label>{{ form.password_check }}
+        <div id="password_check_error" class="error_text"></div>
+    </div>
+    <input type="button" id="join_btn" value="Join">
+</form>
+<script>
+    // 회원가입 버튼 클릭
+    $('#join_btn').click(function(){
+        $.ajax({
+            url : "/api/user/join/",
+            type : "POST",
+            data : $('#join_form').serializeArray(),
+            dataType: 'JSON',
+            success : function(data) {
+                if(data.result) {
+                    alert("성공적으로 가입되었습니다."); // 가입 성공 얼럿
+                    location.href = "/user/login"; // 성공적으로 가입된 경우 login페이지로 이동
+                }
+                show_error(data.error); // 가입하는데 에러가 있는 경우
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    });
+
+    // 회원가입 요청에서 에러가 있는 경우 사용자에게 에러 내용 표시
+    function show_error(error){
+        $('.error_text').empty(); // 기존에 있었던 에러 내용 삭제
+        for(key in error) // 에러 내용 표시
+            $('#' + key + '_error').text(error[key]);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<input type="button" id="main_btn" onclick="location.href='/game/'" value="Main" />
+<div id="email"></div>
+<div id="coin"></div>
+<div id="win"></div>
+<div id="lose"></div>
+</body>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url : "/api/user/detail/",
+            type : "POST",
+            dataType: 'JSON',
+            success : function(data) {
+                if(!data.result){
+                    alert("회원 정보를 가져오는데 실패했습니다. 다시 시도해주세요.");
+                    return false;
+                }
+                $('#email').text(data.data.email);
+                $('#coin').text(data.data.coin + "원");
+                $('#win').text(data.data.win + "승");
+                $('#lose').text(data.data.lose + "패");
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    });
+</script>
+</html>

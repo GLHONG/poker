@@ -3,8 +3,6 @@ from django.http import HttpResponse
 from django.template import Context
 from rest_framework.views import APIView
 from user_manager.forms import join_form, login_form
-
-# json 리턴
 from user_manager.models import AuthUser
 
 
@@ -12,7 +10,6 @@ def json_response(x):
     import json
     return HttpResponse(json.dumps(x, sort_keys=True, indent=2),
                         content_type='application/json; charset=UTF-8')
-
 
 class Join(APIView):
 
@@ -78,14 +75,14 @@ class Logout(APIView):
 
 class Detail(APIView):
     def post(self, request):
-        user = AuthUser.objects.get(id=request.session['id'], email=request.session['email'])
-        if user:
-            data = { 'email': user.email, 'coin': user.coin, 'win': user.win, 'lose': user.lose }
+        user = AuthUser.objects.get(id=request.session['id'], email=request.session['email']) # 세션에 저장되어 있는 id와 email로 회원 정보 가져옴
+        if user: # 회원이 있는 경우
+            data = { 'email': user.email, 'coin': user.coin, 'win': user.win, 'lose': user.lose } # 필요한 값 저장
             return json_response({
                 'result': True,
                 'data': data,
             })
-
+        # 존재하지 않는 회원인 경우 실패 반환
         return json_response({
             'result': False,
         })

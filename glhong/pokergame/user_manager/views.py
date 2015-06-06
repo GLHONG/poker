@@ -27,10 +27,13 @@ class Login(APIView):
         return HttpResponse(tempalte.render(context))
 
 class UserDetail(APIView):
+    # /user/detail 에서 GET으로 들어온 요청인 경우 회원정보 페이지 출력
     def get(self, request):
+        # 세션 값이 존재하는 경우에만 페이지 이동
         if 'id' in request.session and 'email' in request.session:
             template = get_template('detail.html')
             return HttpResponse(template.render())
 
+        # 세션 값이 없는 경우 로그인 페이지로 이동
         return HttpResponseRedirect('/user/login')
 

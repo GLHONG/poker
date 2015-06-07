@@ -16,6 +16,8 @@ import os
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -62,7 +64,7 @@ ROOT_URLCONF = 'pokergame.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR + '/templates'],
+        'DIRS': [BASE_DIR + '/templates'], # template root로 설정
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,3 +115,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# root static 설정
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+

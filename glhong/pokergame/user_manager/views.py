@@ -11,7 +11,7 @@ class Join(APIView):
         if 'id' in request.session and 'email' in request.session:
             return HttpResponseRedirect('/game/')
 
-        template = get_template('join.html') # 페이지 지정
+        template = get_template('user/join.html') # 페이지 지정
         context = Context({'form': join_form()}) # 회원가입 폼
         return HttpResponse(template.render(context))
 
@@ -22,7 +22,7 @@ class Login(APIView):
         if 'id' in request.session and 'email' in request.session:
             return HttpResponseRedirect('/game/')
 
-        tempalte = get_template('login.html') # 페이지 지정
+        tempalte = get_template('user/login.html') # 페이지 지정
         context = Context({'form': login_form()}) # 로그인 폼
         return HttpResponse(tempalte.render(context))
 
@@ -31,9 +31,8 @@ class UserDetail(APIView):
     def get(self, request):
         # 세션 값이 존재하는 경우에만 페이지 이동
         if 'id' in request.session and 'email' in request.session:
-            template = get_template('detail.html')
+            template = get_template('user/detail.html')
             return HttpResponse(template.render())
 
         # 세션 값이 없는 경우 로그인 페이지로 이동
         return HttpResponseRedirect('/user/login')
-

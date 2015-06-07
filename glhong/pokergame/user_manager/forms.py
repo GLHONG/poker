@@ -3,27 +3,38 @@ from user_manager.models import AuthUser
 
 class login_form(forms.Form):
     email = forms.EmailField(
-        label="User Email"
+        label="Email",
+        widget=forms.TextInput(attrs={"class": "form-control",
+                                      "placeholder": "Email"}),
     )
     password = forms.CharField(
-        label="User Password",
-        widget=forms.PasswordInput
+        label="Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control",
+                                          "placeholder": "Password"}),
     )
 
 class join_form(forms.ModelForm):
     email = forms.EmailField(
-        label="User Email"
+        label="User Email",
+        widget=forms.TextInput(attrs={"class": "form-control",
+                                      "placeholder": "Email"}),
     )
     username = forms.CharField(
-        label="User Name"
+        label="User Name",
+        widget=forms.TextInput(attrs={"class": "form-control",
+                                      "placeholder": "Username"}),
+
     )
     password = forms.CharField(
         label="User Password",
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={"class": "form-control",
+                                          "placeholder": "Password"})
     )
     password_check = forms.CharField(
         label="User Password(Again)",
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={"class": "form-control",
+                                  "placeholder": "Password"})
+
     )
 
     class Meta:

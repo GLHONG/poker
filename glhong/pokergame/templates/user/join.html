@@ -1,30 +1,29 @@
+{% load staticfiles%}
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/join.css' %}" />
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
-<form id="join_form">
-    <div>
-        <label>{{ form.email.label }} : </label>{{ form.email }}
-        <div id="email_error" class="error_text"></div>
-    </div>
-    <div>
-        <label>{{ form.username.label }} : </label>{{ form.username }}
-        <div id="username_error" class="error_text"></div>
-    </div>
-    <div>
-        <label>{{ form.password.label }} : </label>{{ form.password }}
-        <div id="password_error" class="error_text"></div>
-    </div>
-    <div>
-        <label>{{ form.password_check.label }} : </label>{{ form.password_check }}
-        <div id="password_check_error" class="error_text"></div>
-    </div>
-    <input type="button" id="join_btn" value="Join">
-</form>
+<div class="container">
+    <form id="join_form" class="form-join">
+        <h2>회원가입</h2>
+        {{  form.email }}
+        <h4 id="email_error" class="error_text"></h4>
+        {{  form.username }}
+        <h4 id="username_error" class="error_text"></h4>
+        {{  form.password }}
+        <h4 id="password_error" class="error_text"></h4>
+        {{  form.password_check }}
+        <h4 id="password_check_error" class="error_text"></h4>
+        <input type="button" id="join_btn" class="btn btn-lg btn-primary btn-block" value="Join"/>
+        <input type="button" onclick="location.href='/user/login/'" class="btn btn-lg btn-info btn-block" value="Login Page"/>
+    </form>
+</div>
 <script>
     // 회원가입 버튼 클릭
     $('#join_btn').click(function(){

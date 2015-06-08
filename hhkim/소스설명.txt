@@ -1,0 +1,36 @@
+﻿0605  소스설명
+www 웹서버 생성
+app.js 라우터설정, 미들웨어, 모듈
+
+원도우에서 프로젝트 생성시 www + app.js 합쳐져 있습니다.
+
+public/stylesheets : 스타일시트(css)
+routes : 라운터()
+view : 화면에 표시되는 view 부분(ejs 모듈을사용)
+
+routes/ index.js 기본설정되어있음
+	join.js	회원가입페이지 이동
+	mainpage.js 로그인하는 페이지 이동
+	memberadd.js 회원가입페이지에서 회원가입시 mysql
+			데이터 추가후 mainpage로 이동
+	users.js 기본적으로 생성
+
+	  res.render('index', { title: 'Express2' });
+		이분이 ejs페이지를 html로 바꿔주는 역활
+
+view/
+	error.ejs 기본적으로 생성
+	index.ejs 기본적으로 생성
+	index2.ejs 테스트용으로 생성함
+	join.ejs 회원가입이 html 페이지
+	mainpage.ejs 로그인 html 페이지
+	testhtml.html html파일로 작성하기위한 파일
+
+0608 소스변경및 설명
+add
+member / db2.js -현재db를 연결하고 sql문 실직적으로 실행하는부분
+		db.js
+routes / index.js /member/memberadd post 타입으로 넣어오게되면 
+				가져온 id, name, password 정보를 가지고 db2.js에는 있는 쿼리문을 실행
+				
+

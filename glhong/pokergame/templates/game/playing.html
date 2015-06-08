@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://localhost:3303/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <input type="hidden" id="email" value="{{ email }}"/>
+    <input type="hidden" id="id" value="{{ id }}"/>
+    <input type="button" id="finish_btn" value="finish"/>
+    <!-- 받은 메시지 출력하는 곳 -->
+    <div id='msg'>
+    </div>
+    <img id="card1" src="" width="8%" height="auto"/>
+    <img id="card2" src="" width="8%" height="auto"/>
+    <img src="/static/img/cards/back.png" width="8%" height="auto"/>
+    <img src="/static/img/cards/back.png" width="8%" height="auto"/>
+</body>
+<script>
+    $(document).ready(function(){
+        room = $('#email').val() + $('#id').val();
+        // 소켓 서버 연결
+        var socket = io.connect('http://localhost:3303');
+        socket.on('connect', function () {
+            socket.emit('join', room);
+        });
+
+        socket.on('fromserver', function(data){
+            if(data.stage === "1"){
+                $('#card1').attr('src', '/static/img/cards/' + data.user_card.cards[0].symbol + data.user_card.cards[0].rank + '.png');
+                $('#card2').attr('src', '/static/img/cards/' + data.user_card.cards[1].symbol + data.user_card.cards[1].rank + '.png');
+            }
+            console.log(data);
+        });
+    });
+
+    function game_playing(data){
+
+    }
+</script>
+</html>

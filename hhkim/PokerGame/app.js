@@ -4,12 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var session = require('session');
+var session = require('session');
+//var session = require('express-session');
+//var RedisStore = require ('connect-redis')(session);
+//var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var main = require('./routes/mainpage');
-var join = require('./routes/join');
-var memberadd = require('./routes/memberadd');
 
 var app = express();
 
@@ -24,12 +26,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//.use(session());
+//app.use(express-session());
 
-app.use('/', main);
+
+
+app.use('/', routes);
 app.use('/users', users);
-app.use('/mainpage', main);
-app.use('/join', join);
-app.use('/memberadd', memberadd);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

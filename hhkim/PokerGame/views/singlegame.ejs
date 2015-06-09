@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+    <title><%= title %></title>
+    <script src="../js/jquery.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+     <script>
+        var user = new Array();
+        var compute = new Array();
+		   $(document).ready(function(){
+			   //alert("테스");
+		    $('#calcBtn').click(function() {
+		     var a = parseFloat($('#a').val());
+		     var b = parseFloat($('#b').val());
+		     if(isNaN(a) || isNaN(b)) {
+		      alert('숫자를 입력해 주세요!');
+		      $('input[type=text]').val('')      
+		      return;
+		     }
+		     //$('#output').val(a+b);
+		     $.post(
+		      '/api/add',
+		      {a:a,b:b},
+		      function(data) {
+		       $('#output').val(data.result);
+		      },
+		      'json'
+		     );
+		    });
+		   });
+           function gamestart(){
+            $.post(
+              '/game/start',
+              {ddd:'ddd'},
+              function(data) {
+               //$('#output').val(data.result);
+               //user.push(data.user.pop());
+               user = data.user;
+               var add = user.pop();
+               var add2 = user.pop();
+               alert(add+"----"+add2);
+               //alert(data.user);
+              // add(user,computer);
+               //alert(data.go);
+              },
+              'json'
+             );
+           }
+
+           function add(user_card,computer_card)
+            {
+                var usercard_1 = user_card;
+               // var usercard_2 = user_card.pop();
+              //  usercard_1 = usercard_1<10?'0'+usercard_1:usercard_1;
+                alert(usercard_1);
+            /*    if(computer_card)
+                {   
+                    $("#computer_card_1").empty();
+                    $('#computer_card_1').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
+
+                    $("#computer_card_2").empty();
+                    $('#computer_card_2').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
+                }
+                else
+                {
+                    $("#computer_card_1").empty();
+                    $('#computer_card_1').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
+
+                    $("#computer_card_2").empty();
+                    $('#computer_card_2').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
+                }
+            //var test = document.game.testadd.value;
+            //socket.emit('call', test);  
+            //document.game.testadd.value = "";
+            $("#computer_card_1").empty();
+            $('#computer_card_1').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+
+            $("#computer_card_2").empty();
+            $('#computer_card_2').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+
+            $("#user_card_1").empty();
+            $('#user_card_1').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+
+            $("#user_card_2").empty();
+            $('#user_card_2').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+             //$("#chatwindow").append("<div>"+test+"</div>");*/
+            }
+
+             function community()
+            {
+            //var test = document.game.testadd.value;
+            //socket.emit('call', test);  
+            //document.game.testadd.value = "";
+            $("#communityzone_cand_1").empty();
+            $('#communityzone_cand_1').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+            $("#communityzone_cand_2").empty();
+            $('#communityzone_cand_2').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+            $("#communityzone_cand_3").empty();
+            $('#communityzone_cand_3').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+
+            
+             //$("#chatwindow").append("<div>"+test+"</div>");
+            }
+
+           function initgame()
+            {
+            //var test = document.game.testadd.value;
+            //socket.emit('call', test);  
+            //document.game.testadd.value = "";
+            $("#computer_card_1").empty();
+          
+
+            $("#computer_card_2").empty();
+            
+
+            $("#user_card_1").empty();
+           
+
+            $("#user_card_2").empty();
+          
+             //$("#chatwindow").append("<div>"+test+"</div>");
+            }
+  </script>
+
+    
+    
+  </head>
+  <body>
+    	<table width="80%" align="center" border="1">
+    		<tr>
+    			<td>
+    				<!-- 가운데 테이블 -->
+    				<table border="1" align="center">
+    					<tr>
+                            <td>
+                            <table border="1" align="center">
+                                <tr height = "200px" valign="middle">
+                                    <td width = "130px" align="center">
+                                     <div id="computer_card_1"></div>
+                                    </td>
+                                    <td width = "130px" align="center"> 
+                                    <div id="computer_card_2"></div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            </td>
+    						
+    					</tr>
+    					<tr height = "10%">
+    						<td>
+    						<div id="computer_batting"></div>
+    						</td>
+    					</tr>
+    					<tr height = "20%" >
+    						<td> 
+                            <table border="1" align="center">
+                                <tr height = "200px" valign="middle">
+                                    <td width = "130px" align="center">
+                                        <div id="communityzone_coin">
+                                            최소배팅 2
+                                            <input type="button" value="gamestart" onclick="gamestart()">
+                                        </div>
+                                    </td>
+                                    <td width = "130px" align="center">
+                                        <div id="communityzone_cand_1"></div>
+                                    </td>
+                                    <td width = "130px" align="center">
+                                        <div id="communityzone_cand_2"></div>
+                                    </td>
+                                    <td width = "130px" align="center">
+                                        <div id="communityzone_cand_3"></div>
+                                    </td>
+                                 
+
+                                    
+                                </tr>
+                            </table>
+    						
+    						<!--<input type="button" value="gamestart"> -->
+    						</td>
+    					</tr>
+    					<tr height = "10%" >
+    						<td>
+    						<div id="user_batting"></div>
+    						</td>
+    					</tr>
+    					<tr>
+    						<td>
+                            <table border="1" align="center">
+                                <tr height="200px" valign="middle">
+                                    <td width = "130px" align="center">
+                                        <table>
+                                            <tr>
+                                                <td colspan="2" align="center">
+                                                    <%=lmember.id%>
+                                                </td>
+                                            </tr>
+                                             <tr>
+                                                <td align="left">
+                                                    <%=lmember.name%>
+                                                </td>
+                                                <td align="right">
+                                                    <%=lmember.money%>
+                                                </td>
+                                            </tr>
+                                             <tr>
+                                                <td align="left">
+                                                    Win : <%=lmember.win%>
+                                                </td>
+                                                <td align="right">
+                                                    Lose : <%=lmember.lose%>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                   <!-- <div id="user_info"></div>-->
+                                    </td>
+                                    <td width = "130px" align="center">
+                                    <div id="user_card_1"></div>
+                                    </td>
+                                    <td width = "130px" align="center">
+                                    <div id="user_card_2"></div>
+                                    </td>
+                                    <td width = "130px" align="center">
+                                        <table>
+                                            <tr>
+                                                <td align="center">
+                                                    <input type="button" value="체크">
+                                                </td>
+                                                <td align="center">
+                                                    <input type="button" value="콜">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <input type="button" value="올인">
+                                                </td>
+                                                <td align="center">
+                                                    <input type="button" value="폴드">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <input type="button" value="레이즈">
+                                                </td>
+                                                <td align="center">
+                                                    <input type="button" value="베팅" disabled="disabled">
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                  <!--  <div id="user_battion"></div> -->
+                                    </td>
+                                </tr>
+                            </table>
+                           
+    						</td>
+    					</tr>
+    				</table>
+    			
+    			
+    			</td>
+    			
+    		</tr>
+    	</table>
+    	<table align="center">
+    		<tr>
+    			<td>
+                <input type="button" value="초기화" onclick="initgame()">
+                <input type="button" value="실행" onclick="add()">
+                <input type="button" value="커뮤니티" onclick="community()">
+    			</td>
+    		</tr>
+    	</table>
+    	
+    	  <input type='text' id='a' size='3'>+
+  <input type='text' id='b' size='3'> 
+  <button id='calcBtn'>=</button>
+  <input type='text' id='output'>
+
+    	
+    
+ 	
+  </body>
+</html>

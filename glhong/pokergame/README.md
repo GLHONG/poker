@@ -19,7 +19,7 @@ DATABASES = {
         'ENGINE': 'mysql.connector.django',
         'NAME': 'pokergame', # Database name
         'USER': 'root',     # User id
-        'PASSWORD': '89ghdkifla10', # User password
+        'PASSWORD': '12341234', # User password
         'HOST': 'localhost',
         'PORT': '3306',
     }

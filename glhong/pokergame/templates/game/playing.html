@@ -6,63 +6,145 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="http://localhost:3303/socket.io/socket.io.js"></script>
-    <script src="/static/js/poker.js"></script>
+    <style>
+        .header {
+            margin: 20px 0 0 0;
+        }
+        .img-responsive {
+            width: auto;
+            height: auto;
+        }
+        .community-cards-content {
+            background-color: #62c165;
+        }
+        .user-cards-content, .server-cards-content {
+            background-color: #a92a22;
+        }
+    </style>
 </head>
 <body>
-    <!-- 사용자 이메일, 아이디 -->
-    <input type="hidden" id="email" value="{{ email }}"/>
-    <input type="hidden" id="id" value="{{ id }}"/>
-
-    <div>
-        <h3 id="notice">첫 배팅 금액을 입력 후 게임을 시작하세요.</h3>
-    </div>
-    <div>
-        <h3 id="all_betting_money">0</h3>
-    </div>
-
-    <!-- 배팅 금액 입력 -->
-    <form class="form-inline">
-        <div class="form-group">
-            <input type="text" class="form-control" id="betting_money" placeholder="배팅 금액">
+    <div class="container">
+        <div class="row header">
+            <div class="col-md-2 col-md-offset-10" style="text-align: right;">
+                <input type="button" id="exit_btn" class="btn btn-lg btn-warning" value="Exit" />
+            </div>
         </div>
-        <div class="form-group">
-            <select id="betting_option" class="form-control" disabled>
-                <option value="">배팅 옵션 선택</option>
-                <option value="fold">fold</option>
-                <option value="check">check</option>
-{#                <option>call</option>#}
-                <option value="raise">raise</option>
-                <option value="all-in">all-in</option>
-            </select>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div id="notice" class="panel-body" style="font-size: 20pt;">
+                        첫 배팅 금액을 입력 후 게임을 시작하세요.
+                    </div>
+                </div>
+            </div>
         </div>
-        <input type="button" id="betting_btn" class="btn btn-primary" value="Betting"/>
-    </form>
-    <div>
-        <img id="user_card_1" src="" width="8%" height="auto"/>
-        <img id="user_card_2" src="" width="8%" height="auto"/>
-        <h2 id="user_result"></h2>
-    </div>
-    <div>
-        <img id="server_card_1" src="/static/img/cards/back.png" width="8%" height="auto"/>
-        <img id="server_card_2" src="/static/img/cards/back.png" width="8%" height="auto"/>
-        <h2 id="server_result"></h2>
-    </div>
-    <div>
-        <img id="community_card_1" src="/static/img/cards/back.png" width="8%" height="auto"/>
-        <img id="community_card_2" src="/static/img/cards/back.png" width="8%" height="auto"/>
-        <img id="community_card_3" src="/static/img/cards/back.png" width="8%" height="auto"/>
-        <img id="community_card_4" src="/static/img/cards/back.png" width="8%" height="auto"/>
-        <img id="community_card_5" src="/static/img/cards/back.png" width="8%" height="auto"/>
-    </div>
+        <div class="row" style="margin-top: 20px">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center">
+                        <h2>Your Cards</h2>
+                    </div>
+                    <div class="panel-body user-cards-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img id="user_card_1" class="img-responsive" src="/static/img/cards/back.png" />
+                            </div>
+                            <div class="col-md-6">
+                                <img id="user_card_2" class="img-responsive" src="/static/img/cards/back.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="user_result" class="panel-body" style="font-size: 20pt;"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <form class="form-inline">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <input type="text" class="form-control input-lg" id="betting_money" placeholder="배팅 금액" style="width:100%">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="form-group col-md-8">
+                            <select id="betting_option" class="form-control" style="width:100%" disabled>
+                                <option value="">배팅 옵션 선택</option>
+                                <option value="fold">fold</option>
+                                <option value="check">check</option>
+                                <option value="raise">raise</option>
+                                <option value="all-in">all-in</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" style="text-align: right;">
+                            <input type="button" id="betting_btn" class="btn btn-primary" value="Betting"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 id="usercoin"></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 id="all_betting_money"></h3>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center">
+                        <h2>Computer Cards</h2>
+                    </div>
+                    <div class="panel-body server-cards-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img id="server_card_1" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                            <div class="col-md-6">
+                               <img id="server_card_2" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="server_result" class="panel-body" style="font-size: 13pt;"></div>
+                </div>
+            </div>
+        </div>
 
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align: center">
+                        <h2>Community Cards</h2>
+                    </div>
+                    <div class="panel-body community-cards-content">
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-1">
+                                <img id="community_card_1" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                            <div class="col-md-2">
+                                <img id="community_card_2" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                            <div class="col-md-2">
+                                <img id="community_card_3" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                            <div class="col-md-2">
+                                <img id="community_card_4" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                            <div class="col-md-2">
+                                <img id="community_card_5" class="img-responsive" src="/static/img/cards/back.png"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 </body>
 
+<script src="/static/js/poker.js"></script>
 <script>
-    poker = new Poker(
-        $('#email').val(),
-        $('#id').val()
-    );
     socket = io.connect('http://localhost:3303');
     // 서버로부터 값을 받아옴
     socket.on('from_dealer', function(data){
@@ -71,6 +153,8 @@
 
 
     $(document).ready(function(){
+        poker = new Poker();
+        $('#usercoin').text(poker.coin);
         $('#betting_btn').click(function(){
             var betting_money = $('#betting_money').val();
             var betting_option = $('#betting_option').val();
@@ -78,16 +162,20 @@
                 alert("배팅 옵션을 선택해주세요!");
                 return false;
             }
-            if (betting_money === "" && (betting_option === "raise" || betting_option === "all-in" || betting_option === "")){
+            if(betting_money === "" && (betting_option === "raise" || betting_option === "all-in" || betting_option === "")){
                 alert("배팅 금액을 입력해주세요.");
-                //
-                // 사용자 소지 코인 비교문 작성
-                //
                 return false;
             }
+            if(betting_option != "check" && betting_option != "fold") {
+                if(!poker.user_betting(betting_money)){
+                   alert("배팅 금액이 소지하신 금액보다 높습니다. 다시 배팅해주세요.");
+                   return false;
+                }
+            }
+
+            $('#usercoin').text(poker.coin);
             poker.to_dealer(betting_money, betting_option);
         });
     });
-
 </script>
 </html>

@@ -1,18 +1,44 @@
-function Poker(email, id){
-
+function Poker(){
     this.init = function() {
+        var user_data = this.get_user_data();
         this.stage_name = [null, "Preflop!", "Flop!", "Turn!", "River!", "Showdown!"];
-        this.email = email;
-        this.id = id;
-        this.room = this.email + this.id;
+        this.email = user_data.data.email;
+        this.username = user_data.data.username;
+        this.coin = user_data.data.coin;
+        this.room = this.email + this.username;
         this.stage = 1;
     }
     this.init();
 }
 
+Poker.prototype.get_user_data = function(){
+    var data = "";
+    $.ajax({
+        url : "/api/user/detail/",
+        type : "GET",
+        dataType: "JSON",
+        async: false,
+        success : function(json) {
+          data = json;
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+    return data;
+}
+
+Poker.prototype.user_betting = function(money){
+    if(parseInt(money) > parseInt(this.coin))
+        return false;
+
+    this.coin = parseInt(this.coin) - parseInt(money);
+    return true;
+
+}
+
 Poker.prototype.to_dealer = function(money, option) {
-
-
     if(this.stage == 1) {
         tag_disabled();
         socket.emit('join', {
@@ -49,11 +75,14 @@ Poker.prototype.from_dealer = function(data) {
         $('#all_betting_money').text(data.betting_money);
 
     } else if(data.stage === 5){
-        console.log(data);
         $('#server_card_1').attr('src', '/static/img/cards/' + data.server_card.cards[0].symbol + data.server_card.cards[0].rank + '.png');
         $('#server_card_2').attr('src', '/static/img/cards/' + data.server_card.cards[1].symbol + data.server_card.cards[1].rank + '.png');
-        $('#user_result').text("User: " + data.user_hands_result.handName + " " + data.user_hands_result.value);
-        $('#server_result').text("Server: " + data.server_hands_result.handName + " " + data.server_hands_result.value);
+        $('#user_result').text("Hand: " + data.user_hands_result.handName + ", Value: " + data.user_hands_result.value);
+        $('#server_result').text("Hand: " + data.server_hands_result.handName + ", Value: " + data.server_hands_result.value);
+        if(data.server_hands_result.value > data.user_hands_result.value)
+            $('#result').text("당신은 패배했습니다.");
+        else
+            $('#result').text("당신은 승리했습니다.");
 
     } else {
         alert("bye");

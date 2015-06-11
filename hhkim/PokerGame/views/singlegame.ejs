@@ -7,86 +7,206 @@
     <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
      <script>
-        var user = new Array();
-        var compute = new Array();
-		   $(document).ready(function(){
-			   //alert("테스");
-		    $('#calcBtn').click(function() {
-		     var a = parseFloat($('#a').val());
-		     var b = parseFloat($('#b').val());
-		     if(isNaN(a) || isNaN(b)) {
-		      alert('숫자를 입력해 주세요!');
-		      $('input[type=text]').val('')      
-		      return;
-		     }
-		     //$('#output').val(a+b);
-		     $.post(
-		      '/api/add',
-		      {a:a,b:b},
-		      function(data) {
-		       $('#output').val(data.result);
-		      },
-		      'json'
-		     );
-		    });
-		   });
-           function gamestart(){
-            $.post(
-              '/game/start',
-              {ddd:'ddd'},
-              function(data) {
-               //$('#output').val(data.result);
-               //user.push(data.user.pop());
-               user = data.user;
-               var add = user.pop();
-               var add2 = user.pop();
-               alert(add+"----"+add2);
-               //alert(data.user);
-              // add(user,computer);
-               //alert(data.go);
-              },
-              'json'
-             );
-           }
+       // var final User_state = 0;
+       // var final Compute_state = 1;
 
-           function add(user_card,computer_card)
-            {
-                var usercard_1 = user_card;
-               // var usercard_2 = user_card.pop();
-              //  usercard_1 = usercard_1<10?'0'+usercard_1:usercard_1;
-                alert(usercard_1);
-            /*    if(computer_card)
-                {   
-                    $("#computer_card_1").empty();
-                    $('#computer_card_1').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
+        var socket = io.connect("http://localhost:3303");
+        var user_card = new Array();
+        var computer_card = new Array();
+        var community_card = new Array();
+        var hallcoin = 0;
+        var prog ='start';
 
-                    $("#computer_card_2").empty();
-                    $('#computer_card_2').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
-                }
-                else
-                {
-                    $("#computer_card_1").empty();
-                    $('#computer_card_1').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
+        //var state = {user : User,coin : 0};
 
-                    $("#computer_card_2").empty();
-                    $('#computer_card_2').append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
-                }
-            //var test = document.game.testadd.value;
-            //socket.emit('call', test);  
-            //document.game.testadd.value = "";
+        var user_batting_coin = 0;
+        var com_batting_coin = 0;
+
+        var user_id = '<%=lmember.id%>';
+        var user_name = '<%=lmember.name%>';
+        var user_coin = <%=lmember.money%>;
+        var user_win = <%=lmember.win%>;
+        var user_lose = <%=lmember.lose%>;
+
+        $(document).ready(function(){
+            socket.emit('join',{user : user_id});//게임방에 들어오게되면 아이디를 넘깁니다.
+
+            $("#user_id").empty();
+            $("#user_id").append("<div>"+user_id+"</div>");
+
+            $("#user_name").empty();
+            $("#user_name").append("<div>"+user_name+"</div>");
+
+            $("#user_coin").empty();
+            $("#user_coin").append("<div>"+user_coin+"</div>");
+
+            $("#user_win").empty();
+            $("#user_win").append("<div>"+user_win+"</div>");
+
+            $("#user_lose").empty();
+            $("#user_lose").append("<div>"+user_lose+"</div>");
+
+            $("#communityzone_coin").empty();
+            $("#communityzone_coin").
+            append("<input type='button' value='gamestart' id='gamestart'>");
+           
+       
+        });
+        $(document).ready(function(){
+            $("#gamestart").click(function(){
+                progress(user_id, 0);
+                $("#communityzone_coin").empty();
+                $("#communityzone_coin").append("<div>"+hallcoin+"</div>");
+            });
+      
+        }); //게임 시작
+        $(document).ready(function(){
+            $("#checkBtn").click(function(){
+                //alert(prog);
+                progress(user_id, 0);
+            });
+        });
+    
+        function progress(user, coin)
+        {
+            socket.emit(prog,{user : user, coin : coin});
+        }
+        function initgame()
+        {
+           
+
+           
+        }
+        function card_change(card_num){
+             if(card_num<10)
+               {
+                    return "0"+card_num;
+               } 
+               else
+               {
+                    return card_num;
+               }
+        }
+        function startgame()
+        {
+            
+        }
+        socket.on('startend', function(data){                   
+            prog=data.nextgame;                                 //다음 진행 요청을 받아옵니다.
+            user_card = data.user_card;
+
             $("#computer_card_1").empty();
-            $('#computer_card_1').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+            $("#computer_card_1").append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
 
             $("#computer_card_2").empty();
-            $('#computer_card_2').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+            $("#computer_card_2").append("<div>"+"<img src='../img/cards/back.png' width='125px' height='180px'>"+"</div>");
 
+         
             $("#user_card_1").empty();
-            $('#user_card_1').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
+            $("#user_card_1").append("<div>"+"<img src='../img/cards/"+card_change(user_card[0])+".png' width='125px' height='180px'>"+"</div>");
 
             $("#user_card_2").empty();
-            $('#user_card_2').append("<div>"+"<img src='../img/cards/01.png' width='125px' height='180px'>"+"</div>");
-             //$("#chatwindow").append("<div>"+test+"</div>");*/
-            }
+            $("#user_card_2").append("<div>"+"<img src='../img/cards/"+card_change(user_card[1])+".png' width='125px' height='180px'>"+"</div>");
+     
+        });  
+        socket.on('freeflopend', function(data){
+            prog=data.nextgame; 
+            community_card = data.community_card;
+
+            $("#communityzone_cand_1").empty();
+            $("#communityzone_cand_1").append("<div>"+"<img src='../img/cards/"
+                +card_change(community_card[0])+".png' width='125px' height='180px'>"+"</div>");
+
+            $("#communityzone_cand_2").empty();
+            $("#communityzone_cand_2").append("<div>"+"<img src='../img/cards/"
+                +card_change(community_card[1])+".png' width='125px' height='180px'>"+"</div>");
+
+            $("#communityzone_cand_3").empty();
+            $("#communityzone_cand_3").append("<div>"+"<img src='../img/cards/"
+                +card_change(community_card[2])+".png' width='125px' height='180px'>"+"</div>");                                //다음 진행 요청을 받아옵니다.
+        });  
+        socket.on('postflopend', function(data){
+            prog=data.nextgame;                                 //다음 진행 요청을 받아옵니다.
+            community_card = data.community_card;
+            
+            $("#communityzone_cand_4").empty();
+            $("#communityzone_cand_4").append("<div>"+"<img src='../img/cards/"
+                +card_change(community_card[3])+".png' width='125px' height='180px'>"+"</div>");
+        });
+        socket.on('battionend', function(data){
+            prog=data.nextgame;                                 //다음 진행 요청을 받아옵니다.
+            community_card = data.community_card;
+            
+            $("#communityzone_cand_5").empty();
+            $("#communityzone_cand_5").append("<div>"+"<img src='../img/cards/"
+                +card_change(community_card[4])+".png' width='125px' height='180px'>"+"</div>");
+        });  
+        socket.on('showdownend', function(data){
+            prog=data.nextgame;                                 //다음 진행 요청을 받아옵니다.
+            
+            computer_card = data.comcard;
+
+            $("#computer_card_1").empty();
+            $("#computer_card_1").append("<div>"+"<img src='../img/cards/"+card_change(computer_card[0])+".png' width='125px' height='180px'>"+"</div>");
+
+            $("#computer_card_2").empty();
+            $("#computer_card_2").append("<div>"+"<img src='../img/cards/"+card_change(computer_card[1])+".png' width='125px' height='180px'>"+"</div>");
+
+            $("#user_pull_card").empty();
+            $("#user_pull_card").append("<div>"+data.lastuser.join('/')+"</div>");
+
+            $("#com_pull_card").empty();
+            $("#com_pull_card").append("<div>"+data.lastcom.join('/')+"</div>");
+        });  
+        socket.on('endend', function(data){
+            prog=data.nextgame;                                 //다음 진행 요청을 받아옵니다.
+
+            $("#computer_card_1").empty();
+          
+            $("#computer_card_2").empty();
+           
+            $("#user_pull_card").empty();
+            
+            $("#com_pull_card").empty();
+
+            $("#user_id").empty();
+          
+            $("#user_name").empty();
+         
+            $("#user_coin").empty();
+            
+            $("#user_win").empty();
+           
+            $("#user_lose").empty();
+
+            $("#user_card_1").empty();
+            
+            $("#user_card_2").empty();
+
+            $("#communityzone_cand_1").empty();
+            $("#communityzone_cand_2").empty();
+            $("#communityzone_cand_3").empty();
+            $("#communityzone_cand_4").empty();
+            $("#communityzone_cand_5").empty();
+          
+            $("#communityzone_coin").empty();
+            $("#communityzone_coin").
+            append("<input type='button' value='gamestart' id='gamestart'>");
+
+        });
+         
+        //var test = document.socketT.testadd.value;
+        //socket.emit('test', 'test'); 
+        //document.socketT.testadd.value = "";
+            
+            //$("#chatwindow").append("<div>"+test+"</div>");
+        
+        function  receive()    //서버엑레 값을 받았을때
+        {
+
+        }
+
+         
 
              function community()
             {
@@ -128,149 +248,151 @@
     
   </head>
   <body>
-    	<table width="80%" align="center" border="1">
-    		<tr>
-    			<td>
-    				<!-- 가운데 테이블 -->
-    				<table border="1" align="center">
-    					<tr>
-                            <td>
-                            <table border="1" align="center">
-                                <tr height = "200px" valign="middle">
-                                    <td width = "130px" align="center">
-                                     <div id="computer_card_1"></div>
+    <h1>click</h1>
+		<!-- 가운데 테이블 -->
+		<table border="1" align="center">
+			<tr>
+                <td>
+                <table border="1" align="center">
+                    <tr height = "200px" valign="middle">
+                        <td width = "130px" align="center">
+                         <div id="computer_card_1"></div>
+                        </td>
+                        <td width = "130px" align="center"> 
+                        <div id="computer_card_2"></div>
+                        </td>
+                    </tr>
+                </table>
+
+                </td>
+				
+			</tr>
+			<tr height = "10%">
+				<td align = "center">
+				<div id="com_pull_card"></div>
+				</td>
+			</tr>
+			<tr height = "20%" >
+				<td> 
+                <table border="1" align="center">
+                    <tr height = "200px" valign="middle">
+                        <td width = "130px" align="center">
+                            최소배팅 2
+                            <div id="communityzone_coin">
+
+                            </div>
+                        </td>
+                        <td width = "130px" align="center">
+                            <div id="communityzone_cand_1"></div>
+                        </td>
+                        <td width = "130px" align="center">
+                            <div id="communityzone_cand_2"></div>
+                        </td>
+                        <td width = "130px" align="center">
+                            <div id="communityzone_cand_3"></div>
+                        </td>
+                        <td width = "130px" align="center">
+                            <div id="communityzone_cand_4"></div>
+                        </td>
+                        <td width = "130px" align="center">
+                            <div id="communityzone_cand_5"></div>
+                        </td>
+
+                        
+                    </tr>
+                </table>
+				
+				<!--<input type="button" value="gamestart"> -->
+				</td>
+			</tr>
+			<tr height = "10%" >
+				<td align = "center">
+				<div id="user_pull_card"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+                <table border="1" align="center">
+                    <tr height="200px" valign="middle">
+                        <td width = "130px" align="center">
+                            <table>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <div id="user_id"></div>
                                     </td>
-                                    <td width = "130px" align="center"> 
-                                    <div id="computer_card_2"></div>
+                                </tr>
+                                 <tr>
+                                    <td align="left">
+                                        <div id="user_name"></div>
+                                    </td>
+                                    <td align="right">
+                                        <div id="user_coin"></div>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td align="left">
+                                        win : <div id="user_win"></div>
+                                    </td>
+                                    <td align="right">
+                                        lose : <div id="user_lose"></div>
                                     </td>
                                 </tr>
                             </table>
-
-                            </td>
-    						
-    					</tr>
-    					<tr height = "10%">
-    						<td>
-    						<div id="computer_batting"></div>
-    						</td>
-    					</tr>
-    					<tr height = "20%" >
-    						<td> 
-                            <table border="1" align="center">
-                                <tr height = "200px" valign="middle">
-                                    <td width = "130px" align="center">
-                                        <div id="communityzone_coin">
-                                            최소배팅 2
-                                            <input type="button" value="gamestart" onclick="gamestart()">
-                                        </div>
+                       <!-- <div id="user_info"></div>-->
+                        </td>
+                        <td width = "130px" align="center">
+                        <div id="user_card_1"></div>
+                        </td>
+                        <td width = "130px" align="center">
+                        <div id="user_card_2"></div>
+                        </td>
+                        <td width = "130px" align="center">
+                            <table>
+                                <tr>
+                                    <td align="center" id = "check">
+                                        <input type="button" value="체크" id = "checkBtn">
                                     </td>
-                                    <td width = "130px" align="center">
-                                        <div id="communityzone_cand_1"></div>
-                                    </td>
-                                    <td width = "130px" align="center">
-                                        <div id="communityzone_cand_2"></div>
-                                    </td>
-                                    <td width = "130px" align="center">
-                                        <div id="communityzone_cand_3"></div>
-                                    </td>
-                                 
-
-                                    
-                                </tr>
-                            </table>
-    						
-    						<!--<input type="button" value="gamestart"> -->
-    						</td>
-    					</tr>
-    					<tr height = "10%" >
-    						<td>
-    						<div id="user_batting"></div>
-    						</td>
-    					</tr>
-    					<tr>
-    						<td>
-                            <table border="1" align="center">
-                                <tr height="200px" valign="middle">
-                                    <td width = "130px" align="center">
-                                        <table>
-                                            <tr>
-                                                <td colspan="2" align="center">
-                                                    <%=lmember.id%>
-                                                </td>
-                                            </tr>
-                                             <tr>
-                                                <td align="left">
-                                                    <%=lmember.name%>
-                                                </td>
-                                                <td align="right">
-                                                    <%=lmember.money%>
-                                                </td>
-                                            </tr>
-                                             <tr>
-                                                <td align="left">
-                                                    Win : <%=lmember.win%>
-                                                </td>
-                                                <td align="right">
-                                                    Lose : <%=lmember.lose%>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                   <!-- <div id="user_info"></div>-->
-                                    </td>
-                                    <td width = "130px" align="center">
-                                    <div id="user_card_1"></div>
-                                    </td>
-                                    <td width = "130px" align="center">
-                                    <div id="user_card_2"></div>
-                                    </td>
-                                    <td width = "130px" align="center">
-                                        <table>
-                                            <tr>
-                                                <td align="center">
-                                                    <input type="button" value="체크">
-                                                </td>
-                                                <td align="center">
-                                                    <input type="button" value="콜">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <input type="button" value="올인">
-                                                </td>
-                                                <td align="center">
-                                                    <input type="button" value="폴드">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td align="center">
-                                                    <input type="button" value="레이즈">
-                                                </td>
-                                                <td align="center">
-                                                    <input type="button" value="베팅" disabled="disabled">
-                                                </td>
-                                            </tr>
-
-                                        </table>
-                                  <!--  <div id="user_battion"></div> -->
+                                    <td align="center" id = "call">
+                                        <input type="button" value="콜" id = "callBtn">
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td align="center" id = "allin">
+                                        <input type="button" value="올인" id = "allinBtn">
+                                    </td>
+                                    <td align="center" id = "flod">
+                                        <input type="button" value="폴드" id = "flodBtn">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" id = "race">
+                                        <input type="button" value="레이즈" id = "raceBtn">
+                                    </td>
+                                    <td align="center" id = "batting">
+                                        <input type="button" value="최소베팅" id = "battingBtnmin" disabled="disabled">
+                                        <input type="button" value="2배베팅" id = "battingBtn2x" disabled="disabled">
+                                        <input type="button" value="3배베팅" id = "battingBtn3x" disabled="disabled">
+                                        <input type="button" value="4배베팅" id = "battingBtn4x" disabled="disabled">
+                                    </td>
+                                </tr>
+
                             </table>
-                           
-    						</td>
-    					</tr>
-    				</table>
-    			
-    			
-    			</td>
-    			
-    		</tr>
-    	</table>
+                      <!--  <div id="user_battion"></div> -->
+                        </td>
+                    </tr>
+                </table>
+               
+				</td>
+			</tr>
+		</table>
+    	
     	<table align="center">
     		<tr>
     			<td>
-                <input type="button" value="초기화" onclick="initgame()">
-                <input type="button" value="실행" onclick="add()">
-                <input type="button" value="커뮤니티" onclick="community()">
+            
+                 <input type="button" value="실행" onclick="progress('<%=lmember.id%>',10)">
+              
+
     			</td>
     		</tr>
     	</table>

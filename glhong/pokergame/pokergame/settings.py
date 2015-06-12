@@ -85,7 +85,8 @@ WSGI_APPLICATION = 'pokergame.wsgi.application'
 # Mysql 데이터베이스 설정
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
+        # 'ENGINE': 'mysql.connector.django',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pokergame',
         'USER': 'root',
         'PASSWORD': '89ghdkifla10',

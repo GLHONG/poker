@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles', # test
+    'django.contrib.staticfiles', # test11
     'user_manager', # user_manager app 설정
     'rest_framework', # rest_framework 설정
     'bootstrap3', # bootstrap 설정

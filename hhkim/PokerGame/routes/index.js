@@ -142,20 +142,24 @@ router.post('/game/start',function(req,res) {
 	// var a = parseFloat(req.body.a);
 	// var b = parseFloat(req.body.b);
 	// var result = a+b;
+
 	var user = new Array();
 	var computer = new Array();
 	user.push(card.pop());
 	computer.push=(card.pop());
 	user.push(card.pop());
 	computer.push=(card.pop());
-	console.log(user.pop());
+	console.log("10번째 카드");
+	console.log(user[0]);
+	console.log(user[1]);
+	//console.log(user.pop());
 	//user.valueOf()
 	req.session.user_card = user;
 	req.session.computer_card=computer;
 	req.session.card = card;
 	
 	
-	 res.send({user: user});
+	 res.send({user_card : user});
 	});
 
 router.get('/', function(req, res){

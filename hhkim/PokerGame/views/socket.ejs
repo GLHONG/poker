@@ -8,35 +8,35 @@
     
     var socket = io.connect("http://localhost:3303");
     
-    		$(function(){
-	    		$('button').click(function(){
-	    		
-	    		socket.emit('chat', $('.chatinput').val());	
-	    		$('.chatinput').val('');
-	    		});
-
-    		});
-    		
-    		/*function add(){
-    			socket.emit('chat', $('.chatinput').val());	
-	    		$('.chatinput').val('');
-	    		});
-    		};*/
-    		
-    		
-    		
-    		function add()
-		{
-	    		var test = document.socketT.testadd.value;
-			socket.emit('call', test);	
-	    		document.socketT.testadd.value = "";
-	    		
-			//$("#chatwindow").append("<div>"+test+"</div>");
-		}
+	$(function(){
+		$('button').click(function(){
 		
-		socket.on('out', function(data){
-    			$('#chatwindow').append("<div>"+data+"</div>");
+		socket.emit('chat', $('.chatinput').val());	
+		$('.chatinput').val('');
+		});
+
+	});
+		
+		/*function add(){
+			socket.emit('chat', $('.chatinput').val());	
+    		$('.chatinput').val('');
     		});
+		};*/
+		
+		
+		
+	function add()
+	{
+    	var test = document.socketT.testadd.value;
+		socket.emit('start', test);	
+    	document.socketT.testadd.value = "";
+    		
+		//$("#chatwindow").append("<div>"+test+"</div>");
+	}
+	
+	socket.on('out', function(data){
+			$('#chatwindow').append("<div>"+data+"</div>");
+	});
     		
     </script>
     <link rel='stylesheet' href='/stylesheets/style.css' />

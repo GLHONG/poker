@@ -16,6 +16,7 @@ class AuthUser(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False, null=False)
 
     win = models.CharField(max_length=10, default='0')
+    draw = models.CharField(max_length=10, default='0')
     lose = models.CharField(max_length=10, default='0')
     coin = models.CharField(max_length=10, default='10000')
 

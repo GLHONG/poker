@@ -40,14 +40,12 @@ io.sockets.on('connection', function(socket){
 				"community_cards": game[data.room].community_cards,
 				"stage": game[data.room].stage,
 				"betting_money": game[data.room].betting_money
-			};
+		};
 		if(data.stage == 5) {
 			return_data.user_hands_result = game[data.room].user_hands_result;
 			return_data.server_hands_result = game[data.room].server_hands_result;
 			return_data.server_card = game[data.room].server_card;
 		}
-		console.log(return_data);
-
 		io.sockets.in(data.room).emit('from_dealer', return_data);
 	});
 });

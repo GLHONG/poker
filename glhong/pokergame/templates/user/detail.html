@@ -1,11 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
 <!-- 메인으로 이동 -->
-<div id="email"></div>
-<div id="username"></div>
-<div id="coin"></div>
-<div id="win"></div>
-<div id="lose"></div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <table class="table">
+                <tr>
+                    <td><h4>Email Address</h4></td><td><h4 id='email'></h4></td>
+                </tr>
+                <tr>
+                    <td><h4>User Name</h4></td><td><h4 id='username'></h4></td>
+                </tr>
+                <tr>
+                    <td><h4>Coin</h4></td><td><h4 id='coin'></h4></td>
+                </tr>
+                <tr>
+                    <td><h4>Win</h4></td><td><h4 id='win'></h4></td>
+                </tr>
+                <tr>
+                    <td><h4>Draw</h4></td><td><h4 id='draw'></h4></td>
+                </tr>
+                <tr>
+                    <td><h4>Lose</h4></td><td><h4 id='lose'></h4></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 <script>
     // 회원 정보 요청
     $(document).ready(function(){
@@ -22,8 +41,9 @@
                 $('#email').text(data.data.email);
                 $('#username').text(data.data.username);
                 $('#coin').text(data.data.coin + "원");
-                $('#win').text(data.data.win + "승");
-                $('#lose').text(data.data.lose + "패");
+                $('#win').text(data.data.win);
+                $('#draw').text(data.data.draw);
+                $('#lose').text(data.data.lose);
             },
             // handle a non-successful response
             error : function(xhr,errmsg,err) {

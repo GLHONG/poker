@@ -18,7 +18,7 @@ function Poker(data){
         this.server_card.hand(this.deck.pop());
 
         this.stage = data.stage;
-        this.betting_money = data.betting_money;
+        this.betting_money = parseInt(data.betting_money * 2);
     };
 
     this.init();
@@ -26,7 +26,7 @@ function Poker(data){
 
 Poker.prototype.flop = function(data){
     this.stage = data.stage;
-    if(data.betting_option == "raise" || data.betting_option == "raise")
+    if(data.betting_option == "raise" || data.betting_option == "all-in")
         this.betting_money = parseInt(this.betting_money) + parseInt(data.betting_money * 2);
     this.deck.pop();
     this.community_cards.hand(this.deck.pop());
@@ -36,7 +36,7 @@ Poker.prototype.flop = function(data){
 
 Poker.prototype.turn = function(data){
     this.stage = data.stage;
-    if(data.betting_option == "raise" || data.betting_option == "raise")
+    if(data.betting_option == "raise" || data.betting_option == "all-in")
         this.betting_money = parseInt(this.betting_money) + parseInt(data.betting_money * 2);
     this.deck.pop();
     this.community_cards.hand(this.deck.pop());
@@ -44,7 +44,7 @@ Poker.prototype.turn = function(data){
 
 Poker.prototype.river = function(data){
     this.stage = data.stage;
-    if(data.betting_option == "raise" || data.betting_option == "raise")
+    if(data.betting_option == "raise" || data.betting_option == "all-in")
         this.betting_money = parseInt(this.betting_money) + parseInt(data.betting_money * 2);
     this.deck.pop();
     this.community_cards.hand(this.deck.pop());
@@ -52,7 +52,7 @@ Poker.prototype.river = function(data){
 
 Poker.prototype.showdown = function(data){
     this.stage = data.stage;
-    if(data.betting_option == "raise" || data.betting_option == "raise")
+    if(data.betting_option == "raise" || data.betting_option == "all-in")
         this.betting_money = parseInt(this.betting_money) + parseInt(data.betting_money * 2);
 
     var card = new Card();
